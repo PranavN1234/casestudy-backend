@@ -23,9 +23,10 @@ def get_embedding(chunk):
     embedding = response_json["data"][0]["embedding"]
     return embedding
 
+
 def get_llm_answer(prompt):
     # Aggregate a messages array to send to the LLM
-    messages = [{"role": "system", "content": "You are a helpful assistant."}]
+    messages = [{"role": "system", "content": "You are a helpful assistant assisting the user with information from https://www.partselect.com/ you will help user in queries with parts"}]
     messages.append({"role": "user", "content": prompt})
     # Send the payload to the LLM to retrieve an answer
     url = 'https://api.openai.com/v1/chat/completions'
@@ -33,11 +34,12 @@ def get_llm_answer(prompt):
         'content-type': 'application/json; charset=utf-8',
         'Authorization': f"Bearer {OPENAI_API_KEY}"
     }
+    print('messages so far', messages)
     data = {
         'model': CHATGPT_MODEL,
         'messages': messages,
         'temperature': 1,
-        'max_tokens': 3000
+        'max_tokens': 4000
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
 
