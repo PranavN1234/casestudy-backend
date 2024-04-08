@@ -5,26 +5,20 @@ from flask import request, jsonify, current_app
 from app.tools import openai, vectorDB
 from app.utils.embedPrompt import build_prompt
 from flask_cors import CORS, cross_origin
-from flask import session
+
 
 PINECONE_INDEX_NAME = 'index235'
-
+recent_queries = []
 @api_blueprint.route('/part_query', methods=['POST'])
 def handle_query():
     question = request.json['question']
 
-    if 'recent_queries' not in session:
-        print('recent queries not in session so reinitializing')
-        session['recent_queries'] = []
+    context_chunks = vectorDB.get_most_similar_chunks_for_query(question, recent_queries, PINECONE_INDEX_NAME)
+    prompt = build_prompt(question, context_chunks)
 
-    print('recent queries are:', session['recent_queries'])
-
-    context_chunks = vectorDB.get_most_similar_chunks_for_query(question, PINECONE_INDEX_NAME)
-    prompt = build_prompt(question, session['recent_queries'], context_chunks)
-
-    session['recent_queries'].append(question)
-
-    session['recent_queries'] = session['recent_queries'][-4:]
+    recent_queries.append(question)
+    # keeping the last three queries
+    recent_queries[:] = recent_queries[-3:]
 
     print("\n==== PROMPT ====\n")
     print(prompt)

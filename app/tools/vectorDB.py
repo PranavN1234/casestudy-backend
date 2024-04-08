@@ -6,9 +6,12 @@ PINECONE_API_KEY = os.environ.get('PINECONE_API_KEY')
 
 pc = Pinecone(api_key=PINECONE_API_KEY)
 
-def get_most_similar_chunks_for_query(query, index_name):
+def get_most_similar_chunks_for_query(query, recent_queries, index_name):
+
+    combined_query = " | ".join(recent_queries[-2:] + [query])
+    print(f'Combined Query {combined_query}')
     print("\nEmbedding query using OpenAI ...")
-    question_embedding = get_embedding(query)
+    question_embedding = get_embedding(combined_query)
 
     print("\nQuerying Pinecone index ...")
     print("\n index name", index_name)
