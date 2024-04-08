@@ -24,3 +24,8 @@ def handle_query():
     print(prompt)
     answer = openai.get_llm_answer(prompt)
     return jsonify({ "question": question, "answer": answer })
+
+@api_blueprint.route('/clear_query', methods=['GET'])
+def clear_query():
+    recent_queries.clear()
+    return jsonify({"message": "Recent queries cleared successfully"})

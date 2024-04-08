@@ -33,8 +33,8 @@ def get_llm_answer(prompt):
     messages = [{"role": "system", "content": "You are a helpful assistant."}]
     # Extend with the conversation history
     messages.extend(conversation_history)
-    print(messages)
-    # Send the payload to the LLM to retrieve an answer
+
+
     url = 'https://api.openai.com/v1/chat/completions'
     headers = {
         'content-type': 'application/json; charset=utf-8',
@@ -48,10 +48,10 @@ def get_llm_answer(prompt):
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
 
-    # Parse the response and update conversation history
+
     response_json = response.json()
     completion = response_json["choices"][0]["message"]["content"]
-    # Append the AI's response to the conversation history
+
     conversation_history.append({"role": "assistant", "content": completion})
 
     return completion
