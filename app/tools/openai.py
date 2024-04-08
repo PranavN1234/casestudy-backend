@@ -23,27 +23,35 @@ def get_embedding(chunk):
     embedding = response_json["data"][0]["embedding"]
     return embedding
 
-
+conversation_history = []
 def get_llm_answer(prompt):
-    # Aggregate a messages array to send to the LLM
-    messages = [{"role": "system", "content": "You are a helpful assistant assisting the user with information from https://www.partselect.com/ you will help user in queries with parts"}]
-    messages.append({"role": "user", "content": prompt})
+    global conversation_history
+    # Append the user's message to the conversation history
+    conversation_history.append({"role": "user", "content": prompt})
+
+    # Prepare the messages to send, starting with any system messages
+    messages = [{"role": "system", "content": "You are a helpful assistant."}]
+    # Extend with the conversation history
+    messages.extend(conversation_history)
+    print(messages)
     # Send the payload to the LLM to retrieve an answer
     url = 'https://api.openai.com/v1/chat/completions'
     headers = {
         'content-type': 'application/json; charset=utf-8',
         'Authorization': f"Bearer {OPENAI_API_KEY}"
     }
-    print('messages so far', messages)
     data = {
         'model': CHATGPT_MODEL,
         'messages': messages,
-        'temperature': 1,
+        'temperature': 0.5,
         'max_tokens': 4000
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
 
-    # return the final answer
+    # Parse the response and update conversation history
     response_json = response.json()
     completion = response_json["choices"][0]["message"]["content"]
+    # Append the AI's response to the conversation history
+    conversation_history.append({"role": "assistant", "content": completion})
+
     return completion

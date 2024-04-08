@@ -11,6 +11,7 @@ def get_most_similar_chunks_for_query(query, index_name):
     question_embedding = get_embedding(query)
 
     print("\nQuerying Pinecone index ...")
+    print("\n index name", index_name)
     index = pc.Index(index_name)
     query_results = index.query(vector=question_embedding, top_k=3, include_metadata=True)
     context_chunks = [x['metadata']['description'] for x in query_results['matches']]
