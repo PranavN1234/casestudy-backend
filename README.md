@@ -13,6 +13,7 @@ Clone the repository on local machine
 Create a virtual enivronment 
 
 python3 -m venv env_name
+
 source env_name/bin/activate
 
 Install the requirements
