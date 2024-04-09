@@ -3,7 +3,7 @@ A backend for the chatbot created in React by Instalily to query Dishwasher and 
 
 **Deployment**
 
-Backend is deployed to GCP 
+Backend is deployed to GCP and frontend can be run directly
 
 
 **Steps to run locally**
