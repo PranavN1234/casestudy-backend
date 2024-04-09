@@ -1,5 +1,5 @@
 # casestudy-backend
-A backend for the chatbot created in React by Instalily to query Dishwasher and Refridgirator Part Information
+A backend for the chatbot created in React by Instalily to query Dishwasher and Refrigerator Part Information
 
 **Deployment**
 
