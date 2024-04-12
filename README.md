@@ -1,3 +1,7 @@
+**Frontend codebase can be found here**
+
+https://github.com/PranavN1234/case-study
+
 # casestudy-backend
 A backend for the chatbot created in React by Instalily to query Dishwasher and Refrigerator Part Information
 
