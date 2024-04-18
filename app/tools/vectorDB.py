@@ -14,25 +14,28 @@ def get_most_similar_chunks_for_query(query, recent_queries, index_name):
 
     print("\nQuerying Pinecone index ...")
     print("\nIndex name:", index_name)
-    index = pc.Index(index_name)
+    index = pc.Index(name=index_name)  # Ensure correct initialization of the Pinecone Index
 
     # Find all part numbers in the query
-    part_numbers = re.findall(r'PS\d+', query)
+    part_numbers = re.findall(r'PS\d+', combined_query)
     combined_results = []
 
     if part_numbers:
         print(f"Filtering for part numbers: {part_numbers}")
         filter_query = {"part_select_number": {"$in": part_numbers}}
-        filtered_query_results = index.query(vector=question_embedding, top_k=1, include_metadata=True, filter=filter_query)
-        combined_results = [x['metadata']['description'] for x in filtered_query_results['matches']]
+        filtered_query_results = index.query(vector=question_embedding, top_k=3, include_metadata=True, filter=filter_query)
+        filtered_results = [x['metadata']['description'] for x in filtered_query_results['matches'] if 'description' in x['metadata']]
+        combined_results.extend(filtered_results)
 
     # Perform a general query without filters
     general_query_results = index.query(vector=question_embedding, top_k=3, include_metadata=True)
-    all_results = [x['metadata']['description'] for x in general_query_results['matches']]
+    all_results = [x['metadata']['description'] for x in general_query_results['matches'] if 'description' in x['metadata']]
 
-    # Add results from the general query to the filtered results if they are not already included
+
+    # Combine results, ensuring no duplicates
     for result in all_results:
         if result not in combined_results:
             combined_results.append(result)
+
 
     return combined_results
