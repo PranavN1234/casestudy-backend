@@ -7,7 +7,7 @@ from app.utils.embedPrompt import build_prompt
 from flask_cors import CORS, cross_origin
 
 
-PINECONE_INDEX_NAME = 'index233'
+PINECONE_INDEX_NAME = 'index230'
 recent_queries = []
 @api_blueprint.route('/part_query', methods=['POST'])
 def handle_query():
